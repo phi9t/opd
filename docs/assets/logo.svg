@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" role="img" aria-label="OPD — on-policy distillation">
+  <title>OPD — on-policy distillation</title>
+  <defs>
+    <linearGradient id="opdGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#5b8def"/>
+      <stop offset="50%" stop-color="#7a5cf0"/>
+      <stop offset="100%" stop-color="#e35d8b"/>
+    </linearGradient>
+    <style>
+      .opd-word { font: 700 64px/1 ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; fill: #111; letter-spacing: 4px; }
+      .opd-sub  { font: 500 16px/1 ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; fill: #6b6b76; letter-spacing: 6px; }
+      @media (prefers-color-scheme: dark) {
+        .opd-word { fill: #f5f5f7; }
+        .opd-sub  { fill: #a7a7b3; }
+      }
+    </style>
+  </defs>
+
+  <!-- three-pool mark: rollout / teacher / actor -->
+  <g transform="translate(40,46)">
+    <!-- connecting flow line -->
+    <line x1="14" y1="22" x2="118" y2="22" stroke="url(#opdGrad)" stroke-width="3" stroke-linecap="round"/>
+    <!-- rollout (student samples) -->
+    <circle cx="14"  cy="22" r="11" fill="#5b8def"/>
+    <!-- teacher (wider model = larger dot) -->
+    <circle cx="66"  cy="22" r="16" fill="#7a5cf0"/>
+    <!-- actor (gradient step) -->
+    <circle cx="118" cy="22" r="11" fill="#e35d8b"/>
+    <!-- sync arrow back -->
+    <path d="M 124 38 Q 70 70 8 38" fill="none" stroke="url(#opdGrad)" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <polygon points="8,38 14,32 14,44" fill="#5b8def"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="200" y="80" class="opd-word">OPD</text>
+  <text x="202" y="108" class="opd-sub">ON-POLICY DISTILLATION</text>
+</svg>

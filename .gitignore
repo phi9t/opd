@@ -11,4 +11,6 @@ dist/
 build/
 explorer/node_modules/
 explorer/dist/
+explorer/test-results/
+explorer/playwright-report/
 .DS_Store

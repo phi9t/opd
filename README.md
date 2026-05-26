@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/logo.svg" alt="OPD — on-policy distillation" width="360"/>
+</p>
+
 OPD is an on-policy distillation trainer for research and teaching. See [docs/superpowers/specs/](docs/superpowers/specs/) for design and implementation plans.
 
 ## Quickstart
