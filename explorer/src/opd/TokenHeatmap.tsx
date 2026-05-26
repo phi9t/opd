@@ -10,7 +10,8 @@ function percentile(values: number[], p: number): number {
 
 function tokenBg(kl: number, scale: number): string {
   if (scale <= 0) return 'transparent'
-  const norm = Math.max(0, Math.min(1, kl / scale))
+  // scale is p95(|kl|); shade by magnitude so spikes in either direction surface.
+  const norm = Math.max(0, Math.min(1, Math.abs(kl) / scale))
   return `rgba(227, 77, 77, ${norm.toFixed(3)})`
 }
 

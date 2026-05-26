@@ -29,6 +29,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: explorer/package-lock.json
 
+      # Using `npm install` (not `npm ci`) because the lockfile generated on
+      # macOS drops `@emnapi/*` optional deps that the Linux runner needs;
+      # there is no single lockfile that satisfies strict-mode install on both
+      # platforms. The runner re-resolves the optional dep tree on its own.
       - run: npm install --no-audit --no-fund
 
       - run: npm run build

@@ -45,7 +45,7 @@ def _build_token_samples(
     if n_keep <= 0:
         return []
 
-    masked_kl = per_token_kl * response_mask
+    masked_kl = per_token_kl.abs() * response_mask
     per_seq_max = masked_kl.amax(dim=1) if masked_kl.numel() > 0 else torch.empty(0)
     k = min(n_keep, per_seq_max.numel())
     if k == 0:
