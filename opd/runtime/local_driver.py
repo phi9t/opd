@@ -29,6 +29,48 @@ def _pad_prompt_ids(encoded: list[list[int]]) -> torch.Tensor:
     return torch.tensor(padded, dtype=torch.long)
 
 
+def _build_token_samples(
+    prompt_texts: list[str],
+    token_ids: torch.Tensor,
+    per_token_kl: torch.Tensor,
+    response_mask: torch.Tensor,
+    tokenizer,
+    n_keep: int,
+) -> list[dict]:
+    """Pick the top-`n_keep` sequences with the largest single-token KL spikes.
+
+    Returns a list of {"prompt", "tokens", "kl"} dicts trimmed to each sequence's
+    unmasked length.
+    """
+    if n_keep <= 0:
+        return []
+
+    masked_kl = per_token_kl * response_mask
+    per_seq_max = masked_kl.amax(dim=1) if masked_kl.numel() > 0 else torch.empty(0)
+    k = min(n_keep, per_seq_max.numel())
+    if k == 0:
+        return []
+    top_idx = torch.topk(per_seq_max, k=k).indices.tolist()
+
+    samples: list[dict] = []
+    for i in top_idx:
+        length = int(response_mask[i].sum().item())
+        if length == 0:
+            continue
+        ids = token_ids[i, :length].tolist()
+        id_to_token = tokenizer._id_to_token
+        tokens = [id_to_token[t] if t in id_to_token else f"‹{t}›" for t in ids]
+        kls = per_token_kl[i, :length].tolist()
+        samples.append(
+            {
+                "prompt": prompt_texts[i],
+                "tokens": tokens,
+                "kl": [float(x) for x in kls],
+            }
+        )
+    return samples
+
+
 class LocalDriver:
     def __init__(self, cfg: TrainConfig) -> None:
         self.cfg = cfg
@@ -96,6 +138,15 @@ class LocalDriver:
             response_lengths = trajectory.token_ids.shape[1]
             num_tokens = int(trajectory.token_ids.numel())
 
+            samples = _build_token_samples(
+                prompt_texts=texts,
+                token_ids=trajectory.token_ids.detach().cpu(),
+                per_token_kl=train_metrics["per_token_kl"],
+                response_mask=train_metrics["response_mask"],
+                tokenizer=self.tokenizer,
+                n_keep=cfg.log_token_samples,
+            )
+
             payload = {
                 "step": step,
                 "gen_ms": gen_ms,
@@ -110,6 +161,7 @@ class LocalDriver:
                 "grad_norm": train_metrics["grad_norm"],
                 "loss_mode": cfg.loss_mode,
                 "teacher_signal": cfg.teacher_signal,
+                "samples": samples,
             }
 
             write_step_json(self.run_dir, step, payload)

@@ -1,3 +1,9 @@
+export interface TokenSample {
+  prompt: string
+  tokens: string[]
+  kl: number[]
+}
+
 export interface StepMetrics {
   step: number
   gen_ms: number
@@ -12,6 +18,7 @@ export interface StepMetrics {
   grad_norm: number
   loss_mode: string
   teacher_signal: string
+  samples?: TokenSample[]
 }
 
 export interface RunBundle {

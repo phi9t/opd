@@ -25,6 +25,7 @@ class TrainConfig:
     vocab_size: int
     prompts_path: str
     tokenizer_dir: str
+    log_token_samples: int = 4
 
 
 def load_config(path: Path) -> TrainConfig:
@@ -47,6 +48,7 @@ def load_config(path: Path) -> TrainConfig:
         vocab_size=int(raw["model"]["vocab_size"]),
         prompts_path=raw["data"]["prompts_path"],
         tokenizer_dir=raw["data"]["tokenizer_dir"],
+        log_token_samples=int(raw.get("log_token_samples", 4)),
     )
 
 

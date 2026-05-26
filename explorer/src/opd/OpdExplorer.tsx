@@ -3,9 +3,11 @@ import Glossary from './Glossary'
 import LearningCurves from './LearningCurves'
 import RunOverview from './RunOverview'
 import StepTimeline from './StepTimeline'
+import TokenHeatmap from './TokenHeatmap'
 import type { RunBundle, RunIndexEntry } from './types'
 
-const INDEX_URL = '/data/index.json'
+const BASE = import.meta.env.BASE_URL
+const INDEX_URL = `${BASE}data/index.json`
 
 export default function OpdExplorer() {
   const [index, setIndex] = useState<RunIndexEntry[]>([])
@@ -50,7 +52,7 @@ export default function OpdExplorer() {
     setError(null)
     setSelectedId(entry.id)
 
-    fetch(`/data/${entry.path}`)
+    fetch(`${BASE}data/${entry.path}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to load run (${res.status})`)
         return res.json() as Promise<RunBundle>
@@ -124,6 +126,7 @@ export default function OpdExplorer() {
               <StepTimeline steps={bundle.steps} />
               <LearningCurves steps={bundle.steps} />
             </div>
+            <TokenHeatmap steps={bundle.steps} />
             <Glossary terms={bundle.glossary} />
           </>
         ) : (

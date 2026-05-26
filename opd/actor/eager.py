@@ -20,7 +20,7 @@ class StudentActor:
         self.model.train()
         self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=config.lr)
 
-    def train_step(self, batch: TrainBatch) -> dict[str, float]:
+    def train_step(self, batch: TrainBatch) -> dict:
         traj = batch.trajectory
         teacher = batch.teacher
 
@@ -49,4 +49,6 @@ class StudentActor:
             "loss": float(loss.item()),
             "grad_norm": float(grad_norm),
             "mean_kl": float(mean_kl.item()),
+            "per_token_kl": per_token_kl.detach().cpu(),
+            "response_mask": mask.detach().cpu(),
         }
