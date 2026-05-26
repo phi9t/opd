@@ -2,14 +2,18 @@ import { Fragment, type ReactNode } from 'react'
 import { BlockMath, InlineMath } from 'react-katex'
 
 // Split on $$...$$ (block) and $...$ (inline) and render each segment.
+const renderMathError = (err: Error) => (
+  <code className="text-danger">[KaTeX] {err.message}</code>
+)
+
 function renderWithMath(text: string): ReactNode {
   const parts = text.split(/(\$\$[^$]+\$\$|\$[^$]+\$)/g)
   return parts.map((part, i) => {
     if (part.startsWith('$$') && part.endsWith('$$')) {
-      return <BlockMath key={i} math={part.slice(2, -2)} />
+      return <BlockMath key={i} math={part.slice(2, -2)} renderError={renderMathError} />
     }
     if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
-      return <InlineMath key={i} math={part.slice(1, -1)} />
+      return <InlineMath key={i} math={part.slice(1, -1)} renderError={renderMathError} />
     }
     return <Fragment key={i}>{part}</Fragment>
   })

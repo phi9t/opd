@@ -44,7 +44,7 @@ _GLOSSARY = {
         "Proximal Policy Optimization. Clipped importance-sampling policy gradient with a value "
         "baseline. Objective: $\\mathbb{E}_t[\\min(r_t(\\theta) A_t,\\ \\mathrm{clip}(r_t,\\,1{-}\\epsilon,\\,1{+}\\epsilon) A_t)]$ "
         "where $r_t = \\pi_\\theta / \\pi_{\\theta_{\\mathrm{old}}}$. OPD with `epochs_per_step = 1` and "
-        "$A_t = -\\mathcal{L}_{\\mathrm{KL},t}$ degenerates into a degenerate single-epoch PPO."
+        "$A_t = -\\mathcal{L}_{\\mathrm{KL},t}$ degenerates into a single-epoch PPO."
     ),
     "grpo": (
         "Group Relative Policy Optimization. Drops the value critic; advantages are normalized "
