@@ -4,6 +4,8 @@ __pycache__/
 .venv/
 venv/
 runs/
+!explorer/public/data/runs/
+!explorer/public/data/runs/**
 *.egg-info/
 dist/
 build/
