@@ -1,0 +1,25 @@
+tier: tiny
+runtime: local
+device: cpu
+engine: eager
+max_steps: 20
+batch_size: 4
+max_new_tokens: 32
+lr: 0.0001
+seed: 42
+run_dir: runs
+
+model:
+  student_hidden_size: 256
+  teacher_hidden_size: 512
+  vocab_size: 8192
+
+loss:
+  mode: kl
+
+teacher:
+  signal: sampled
+
+data:
+  prompts_path: data/prompts/tiny_stories.jsonl
+  tokenizer_dir: data/tokenizer/tiny
