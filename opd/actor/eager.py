@@ -21,6 +21,7 @@ class StudentActor:
         self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=config.lr)
 
     def train_step(self, batch: TrainBatch) -> dict:
+        """One AdamW step on the reverse-KL distillation loss; see `opd/loss/kl.py`."""
         traj = batch.trajectory
         teacher = batch.teacher
 

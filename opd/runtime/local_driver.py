@@ -37,10 +37,11 @@ def _build_token_samples(
     tokenizer,
     n_keep: int,
 ) -> list[dict]:
-    """Pick the top-`n_keep` sequences with the largest single-token KL spikes.
+    """Pick the top-`n_keep` sequences with the largest single-token |KL| spikes.
 
-    Returns a list of {"prompt", "tokens", "kl"} dicts trimmed to each sequence's
-    unmasked length.
+    Ranks by `per_token_kl.abs().amax(dim=1)` so spikes in either direction surface,
+    matching the magnitude convention used by the explorer's TokenHeatmap. Returns a
+    list of {"prompt", "tokens", "kl"} dicts trimmed to each sequence's unmasked length.
     """
     if n_keep <= 0:
         return []

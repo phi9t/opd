@@ -9,9 +9,54 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 _INDEX_PATH = _REPO_ROOT / "explorer" / "public" / "data" / "index.json"
 
 _GLOSSARY = {
-    "opd": "Rollout + teacher logprob service + KL update",
-    "ppo": "Proximal Policy Optimization — clipped policy-gradient RL with a value baseline",
-    "grpo": "Group Relative Policy Optimization — advantages normalized within prompt groups",
+    "opd": (
+        "On-policy distillation. The student samples its own trajectories, a frozen "
+        "teacher scores those same tokens, and the student is updated to minimize "
+        "$\\mathrm{KL}(\\pi_S \\,\\|\\, \\pi_T)$ on the state distribution it actually visits. "
+        "Combines RL's correct credit assignment with SFT's dense per-token signal. "
+        "See `docs/tutorials/02_on_policy_distillation.md`."
+    ),
+    "reverse_kl": (
+        "The per-token loss: $\\mathcal{L}_{\\mathrm{KL},t} = \\log \\pi_S(y_t \\mid s_t) - \\log \\pi_T(y_t \\mid s_t)$, "
+        "averaged over response positions. Reverse (not forward) KL because the expectation is "
+        "under the student — the student learns to put mass where the teacher does on its own "
+        "state distribution rather than covering the teacher's entire support. Mode-seeking."
+    ),
+    "on_policy": (
+        "Sampling the training data from the current student instead of from a static "
+        "teacher-generated corpus. Avoids exposure bias: the student is supervised on the "
+        "states it will actually reach at inference, not on states only the teacher would have "
+        "visited. The fix is the same DAGGER-style correction used in imitation learning."
+    ),
+    "dense_reward": (
+        "RL teaches $O(1)$ bits per episode — one terminal scalar reward spread across all "
+        "tokens by the policy gradient. Distillation against a teacher's logprobs teaches "
+        "$O(N)$ bits per episode — one signal per token. For a fixed compute budget, the "
+        "per-token signal-to-noise ratio is dramatically higher."
+    ),
+    "weight_sync": (
+        "Between actor and rollout each step: the student's updated parameters are copied into "
+        "the rollout module so step $t{+}1$ samples from the post-update policy. Recorded as "
+        "`sync_ms` and `sync_bytes`. Tiny tier: in-process `load_state_dict`. At scale: "
+        "FSDP `state_dict` gather followed by a vLLM `load_weights` bulk call."
+    ),
+    "ppo": (
+        "Proximal Policy Optimization. Clipped importance-sampling policy gradient with a value "
+        "baseline. Objective: $\\mathbb{E}_t[\\min(r_t(\\theta) A_t,\\ \\mathrm{clip}(r_t,\\,1{-}\\epsilon,\\,1{+}\\epsilon) A_t)]$ "
+        "where $r_t = \\pi_\\theta / \\pi_{\\theta_{\\mathrm{old}}}$. OPD with `epochs_per_step = 1` and "
+        "$A_t = -\\mathcal{L}_{\\mathrm{KL},t}$ degenerates into a degenerate single-epoch PPO."
+    ),
+    "grpo": (
+        "Group Relative Policy Optimization. Drops the value critic; advantages are normalized "
+        "across $n$ rollouts per prompt: $A_t = (R - \\mathrm{mean}(R_{\\mathrm{group}})) / \\mathrm{std}(R_{\\mathrm{group}})$. "
+        "Cheaper than PPO (no critic) at the cost of needing multiple rollouts per prompt."
+    ),
+    "token_kl_heatmap": (
+        "Per-token reverse-KL rendered as a sentence with each token shaded by "
+        "$|\\mathcal{L}_{\\mathrm{KL},t}| / P_{95}(|\\mathcal{L}_{\\mathrm{KL}}|)$. Magnitude (not sign) so debug spikes "
+        "in either direction surface. The `_build_token_samples` selector picks the top-$N$ "
+        "sequences by maximum per-token $|\\mathrm{KL}|$ each step."
+    ),
 }
 
 

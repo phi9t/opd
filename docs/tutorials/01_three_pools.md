@@ -123,7 +123,8 @@ The explorer timeline intentionally surfaces **teacher wait** and **sync** even 
 ## Next steps
 
 - **M2:** `qwen3_small` tier — Ray three-pool layout, vLLM rollout, FSDP actor, real HF models.
-- **Tutorial 02:** sync step trace and `sync_bytes` at scale.
-- **Tutorial 03:** `loss.mode=opd_rl` vs KL.
+- **[Tutorial 02](02_on_policy_distillation.md):** the math — reverse-KL derivation, on-policy vs SFT, the RL connection.
+- **Tutorial 03** (planned): sync step trace and `sync_bytes` at scale.
+- **Tutorial 04** (planned): `loss.mode=opd_rl` vs KL.
 
 Specs and plans: [docs/superpowers/specs/2026-05-26-opd-compute-infra-design.md](../superpowers/specs/2026-05-26-opd-compute-infra-design.md).

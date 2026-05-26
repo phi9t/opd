@@ -13,4 +13,7 @@ python -m venv .venv && .venv/bin/pip install -e ".[dev]"
 cd explorer && npm install && npm run dev
 ```
 
-Tutorial walkthrough: [docs/tutorials/01_three_pools.md](docs/tutorials/01_three_pools.md).
+Tutorials:
+
+- [01 — Three Pools on CPU](docs/tutorials/01_three_pools.md): the mechanics — rollout, teacher, train, sync.
+- [02 — Why On-Policy Distillation Works](docs/tutorials/02_on_policy_distillation.md): the math — reverse-KL derivation, on-policy vs SFT, the RL connection.
