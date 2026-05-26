@@ -1,37 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" role="img" aria-label="OPD — on-policy distillation">
-  <title>OPD — on-policy distillation</title>
-  <defs>
-    <linearGradient id="opdGrad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%"  stop-color="#5b8def"/>
-      <stop offset="50%" stop-color="#7a5cf0"/>
-      <stop offset="100%" stop-color="#e35d8b"/>
-    </linearGradient>
-    <style>
-      .opd-word { font: 700 64px/1 ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; fill: #111; letter-spacing: 4px; }
-      .opd-sub  { font: 500 16px/1 ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; fill: #6b6b76; letter-spacing: 6px; }
-      @media (prefers-color-scheme: dark) {
-        .opd-word { fill: #f5f5f7; }
-        .opd-sub  { fill: #a7a7b3; }
-      }
-    </style>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 160" role="img" aria-label="on-policy distillation">
+  <title>on-policy distillation</title>
+  <style>
+    .opd-tok    { fill: #7a5cf0; }
+    .opd-tok-on { fill: #e35d8b; }
+    .opd-bar    { fill: #5b8def; }
+    .opd-bar-on { fill: #e35d8b; }
+    .opd-tick   { stroke: #6b6b76; stroke-width: 1.5; stroke-linecap: round; }
+    .opd-text   { font: 500 18px/1 ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; fill: #111; letter-spacing: 2px; }
+    @media (prefers-color-scheme: dark) {
+      .opd-text { fill: #f5f5f7; }
+      .opd-tick { stroke: #a7a7b3; }
+    }
+  </style>
 
-  <!-- three-pool mark: rollout / teacher / actor -->
-  <g transform="translate(40,46)">
-    <!-- connecting flow line -->
-    <line x1="14" y1="22" x2="118" y2="22" stroke="url(#opdGrad)" stroke-width="3" stroke-linecap="round"/>
-    <!-- rollout (student samples) -->
-    <circle cx="14"  cy="22" r="11" fill="#5b8def"/>
-    <!-- teacher (wider model = larger dot) -->
-    <circle cx="66"  cy="22" r="16" fill="#7a5cf0"/>
-    <!-- actor (gradient step) -->
-    <circle cx="118" cy="22" r="11" fill="#e35d8b"/>
-    <!-- sync arrow back -->
-    <path d="M 124 38 Q 70 70 8 38" fill="none" stroke="url(#opdGrad)" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
-    <polygon points="8,38 14,32 14,44" fill="#5b8def"/>
+  <!-- Rollout: a left-to-right sequence of emitted tokens.
+       The right-most token is "current" (highlighted) — it was sampled from
+       the distribution shown directly below it. -->
+  <g transform="translate(70,28)">
+    <rect class="opd-tok"    x="0"   y="0" width="22" height="14" rx="3"/>
+    <rect class="opd-tok"    x="30"  y="0" width="22" height="14" rx="3"/>
+    <rect class="opd-tok"    x="60"  y="0" width="22" height="14" rx="3"/>
+    <rect class="opd-tok-on" x="90"  y="0" width="22" height="14" rx="3"/>
   </g>
 
-  <!-- wordmark -->
-  <text x="200" y="80" class="opd-word">OPD</text>
-  <text x="202" y="108" class="opd-sub">ON-POLICY DISTILLATION</text>
+  <!-- Tick: links the current token to the sampled bar in the distribution. -->
+  <line class="opd-tick" x1="171" y1="46" x2="171" y2="58"/>
+
+  <!-- Next-token distribution (softmax over vocab).
+       Bars rise from a shared baseline; the sampled bar is highlighted. -->
+  <g transform="translate(70,60)">
+    <rect class="opd-bar"    x="0"   y="32" width="14" height="14" rx="2"/>
+    <rect class="opd-bar"    x="20"  y="22" width="14" height="24" rx="2"/>
+    <rect class="opd-bar"    x="40"  y="28" width="14" height="18" rx="2"/>
+    <rect class="opd-bar"    x="60"  y="14" width="14" height="32" rx="2"/>
+    <rect class="opd-bar-on" x="80"  y="0"  width="14" height="46" rx="2"/>
+    <rect class="opd-bar"    x="100" y="20" width="14" height="26" rx="2"/>
+    <rect class="opd-bar"    x="120" y="34" width="14" height="12" rx="2"/>
+    <line class="opd-tick" x1="-4" y1="46" x2="142" y2="46"/>
+  </g>
+
+  <!-- Tagline -->
+  <text x="160" y="138" text-anchor="middle" class="opd-text">on-policy distillation</text>
 </svg>
