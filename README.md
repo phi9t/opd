@@ -1,1 +1,12 @@
 OPD is an on-policy distillation trainer for research and teaching. See [docs/superpowers/specs/](docs/superpowers/specs/) for design and implementation plans.
+
+## Quickstart
+
+```bash
+python -m venv .venv && .venv/bin/pip install -e ".[dev]"
+./scripts/run_lab.sh
+.venv/bin/opd export-explorer --run runs/<latest_run_dir> --out explorer/public/data/runs/my-run.json
+cd explorer && npm install && npm run dev
+```
+
+Tutorial walkthrough: [docs/tutorials/01_three_pools.md](docs/tutorials/01_three_pools.md).
